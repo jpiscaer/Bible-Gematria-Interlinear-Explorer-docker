@@ -1,12 +1,27 @@
-from flask import Flask, request
+from flask import Flask, request, send_from_directory
 from flask_caching import Cache
 from html import escape
 import dataset
 import re
+import os
 
 app = Flask(__name__)
 app.config.from_mapping({'CACHE_TYPE' : 'filesystem', 'CACHE_DIR' : 'CACHED_PAGES', 'CACHE_THRESHOLD' : 150000})
 cache = Cache(app)
+
+# Route to serve LC_ directory files
+@app.route('/LC_/<path:filename>')
+def serve_lc_file(filename):
+    return send_from_directory('LC_', filename)
+
+# Test route to verify LC_ directory is accessible
+@app.route('/test-lc')
+def test_lc():
+    try:
+        lc_files = os.listdir('LC_')
+        return f"LC_ directory accessible. Found {len(lc_files)} files. First few: {lc_files[:5]}"
+    except Exception as e:
+        return f"Error accessing LC_ directory: {str(e)}"
 
 DB_PATH = 'sqlite:///Complete.db'
 ROW_RESULT_LIMIT = 20000

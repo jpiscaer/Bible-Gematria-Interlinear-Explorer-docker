@@ -1,45 +1,141 @@
 # Bible Gematria Interlinear Explorer
 
-[![Interlinear Explorer](https://user-images.githubusercontent.com/86980762/125381777-8144c500-e362-11eb-9420-6612ccacad37.png)](https://theprophetictimeline.com/explorer?reference=Genesis+1:1)
+A Flask web application for exploring Bible texts with gematria calculations, Strong's Concordance integration, and manuscript viewing capabilities.
 
-Interlinear Hebrew / Greek explorer, and Gematria Browser.
+## Features
 
-# About
+- **Bible Text Explorer**: Navigate through Bible verses with interlinear display
+- **Gematria Calculator**: Calculate numerical values of Hebrew and Greek words
+- **Strong's Concordance**: Integrated Strong's number definitions and transliterations
+- **Manuscript Viewer**: View Leningrad Codex images
+- **Search Functionality**: Search by verse reference, Strong's numbers, gematria values, or English text
+- **Caching**: Flask-Caching for improved performance
 
-This Flask Application can be installed on Windows, or Linux.
+## Quick Start with Docker
 
-Directions in `Installation.txt` can show how this can be Installed with uWSGI and nginx, on Ubuntu 20.04 Server.
+### Prerequisites
+- Docker installed on your system
+- Git (for cloning the repository)
 
-# Interlinear Explorer
+### Build and Run
 
-With this program you can view the KJV (1769) or 1611 Authorized Version, alongside the original Hebrew and Greek.
+1. **Clone the repository**:
+   ```bash
+   git clone <your-github-repo-url>
+   cd Bible-Gematria-Interlinear-Explorer
+   ```
 
-The Authorized Version has footnotes that can be clicked and followed, including to the Apocrypha.
+2. **Download required data files** (these are too large for GitHub):
+   - **Complete.db** (178MB): Download from the original source or contact the repository maintainer
+   - **LC_/ directory** (2.7GB): Contains Leningrad Codex manuscript images - download from the original source
+   
+   Place these files in the project root directory:
+   ```
+   Bible-Gematria-Interlinear-Explorer/
+   ├── Complete.db          # Download and place here
+   ├── LC_/                 # Download and place here
+   ├── static/              # Already included
+   └── ... (other files)
+   ```
 
-[![Apocrypha](https://user-images.githubusercontent.com/86980762/125387912-9b83a080-e36c-11eb-9d20-1ee286d7cfbc.png)](https://theprophetictimeline.com/explorer?reference=1+Esdras+1:1)
+3. **Build the Docker image**:
+   ```bash
+   docker build -t bible-gematria-app .
+   ```
 
-Hover over each original word in a verse, to show its ESV (or KJV for Greek) Translation, part of speech, Gloss, etc.
+4. **Run the container**:
+   ```bash
+   docker run -p 8000:8000 bible-gematria-app
+   ```
 
-You can also view the Strong's Number linked to a word, for a more in depth definition:
+5. **Access the application**:
+   Open your browser and go to `http://localhost:8000`
 
-[![Interlinear](https://user-images.githubusercontent.com/86980762/125389564-688edc00-e36f-11eb-8d4b-d9107ca6649d.png)](https://theprophetictimeline.com/explorer?reference=Matthew+27:29)
+### Using the Test Script
 
-## Transliterations
+The repository includes a test script for easy building and verification:
 
-For Hebrew verses hover over the **Translit** header for a better pronunciation.
+```bash
+chmod +x docker-test.sh
+./docker-test.sh
+```
 
-[![Transliteration](https://user-images.githubusercontent.com/86980762/125213313-e8d61400-e27f-11eb-9772-a93b15704344.png)](https://theprophetictimeline.com/explorer?reference=Genesis+4:20)
+## Project Structure
 
-&nbsp;
+```
+├── myproject.py          # Main Flask application
+├── wsgi.py               # WSGI entry point
+├── Complete.db           # SQLite database with Bible data
+├── static/               # Static assets (CSS, JS, fonts, icons)
+├── LC_/                  # Leningrad Codex manuscript images
+├── Dockerfile            # Docker configuration
+├── requirements.txt      # Python dependencies
+└── docker-test.sh        # Build and test script
+```
 
-# Capabilities
+## API Endpoints
 
-The following are the capabilities of this explorer:
+- `/` - Main application interface
+- `/explorer` - Bible verse explorer
+- `/strongs` - Strong's Concordance search
+- `/gematria` - Gematria value search
+- `/english` - English text search
+- `/LC_/<filename>` - Manuscript images
+- `/test-lc` - Test endpoint for LC_ directory access
 
-* Search gematria word / verse values throughout the Bible
-* Analyze the Hebrew or Greek text
-* View the 1769 or 1611 KJV and original footnotes
-* Check Stephanus totals in Greek
-* View and Search Strong's definitions
-* Search English phrases
-* And more
+## Development
+
+### Local Development Setup
+
+1. **Install Python dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+2. **Run the Flask application**:
+   ```bash
+   python myproject.py
+   ```
+
+### Docker Development
+
+For x86-64 architecture specifically:
+
+```bash
+# Build for x86-64 platform
+docker build --platform linux/amd64 -t bible-gematria-app .
+
+# Run the container
+docker run --platform linux/amd64 -p 8000:8000 bible-gematria-app
+```
+
+## Configuration
+
+The application uses the following configuration:
+- **Database**: SQLite (`Complete.db`)
+- **Cache**: Filesystem cache in `CACHED_PAGES/`
+- **Port**: 8000 (configurable via Docker)
+- **Workers**: 3 Gunicorn workers
+
+## Requirements
+
+- Python 3.12+
+- Flask 2.3.3
+- Flask-Caching 2.1.0
+- dataset 1.6.2
+- gunicorn 21.2.0
+
+## License
+
+This project is for educational and research purposes.
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## Support
+
+For issues and questions, please create an issue in the GitHub repository.
