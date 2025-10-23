@@ -2,6 +2,6 @@ version: '3.8'
 
 services:
   bible-gematria-app:
-    image: ghcr.io/jpiscaer/bible-gematria-app:x86-64
+    image: ghcr.io/jpiscaer/bible-gematria-app:latest
     ports:
       - "8000:8000"
