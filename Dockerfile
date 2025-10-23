@@ -10,9 +10,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcc \
-    && rm -rf /var/lib/apt/lists/*
+#RUN apt-get update && apt-get install -y --no-install-recommends \
+#    gcc \
+#    && rm -rf /var/lib/apt/lists/*
 
 # Copy application files explicitly
 COPY myproject.py /app/
@@ -22,7 +22,7 @@ COPY myproject.service /app/
 COPY requirements.txt /app/
 
 # unzip the database if present as zip
-RUN if [ -f Complete.zip ]; then unzip -o Complete.zip -d ${APP_DIR}; fi
+#RUN if [ -f Complete.zip ]; then unzip -o Complete.zip -d ${APP_DIR}; fi
 
 # Copy database file
 COPY Complete.db /app/
