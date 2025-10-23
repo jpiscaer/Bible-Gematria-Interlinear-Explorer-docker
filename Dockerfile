@@ -21,6 +21,9 @@ COPY myproject.ini /app/
 COPY myproject.service /app/
 COPY requirements.txt /app/
 
+# unzip the database if present as zip
+RUN if [ -f Complete.zip ]; then unzip -o Complete.zip -d ${APP_DIR}; fi
+
 # Copy database file
 COPY Complete.db /app/
 
